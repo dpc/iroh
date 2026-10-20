@@ -236,6 +236,8 @@ impl P2pCertificate<'_> {
     /// Get a [`ring::signature::UnparsedPublicKey`] for this `signature_scheme`.
     /// Return `Error` if the `signature_scheme` does not match the public key signature
     /// and hashing algorithm or if the `signature_scheme` is not supported.
+    // Preserve the 0.35 pinned-peer verifier's errors without inventing PKI context.
+    #[allow(deprecated)]
     fn public_key(
         &self,
         signature_scheme: rustls::SignatureScheme,
@@ -341,6 +343,8 @@ impl P2pCertificate<'_> {
     /// Return the signature scheme corresponding to [`AlgorithmIdentifier`]s
     /// of `subject_pki` and `signature_algorithm`
     /// according to <https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.3>.
+    // Preserve the 0.35 pinned-peer verifier's errors without inventing PKI context.
+    #[allow(deprecated)]
     fn signature_scheme(&self) -> Result<rustls::SignatureScheme, webpki::Error> {
         // Certificates MUST use the NamedCurve encoding for elliptic curve parameters.
         // Endpoints MUST abort the connection attempt if it is not used.

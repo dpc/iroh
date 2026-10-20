@@ -11,6 +11,7 @@ use std::sync::Arc;
 
 use ed25519_dalek::pkcs8::EncodePublicKey;
 use iroh_base::PublicKey;
+use rustls::pki_types::SubjectPublicKeyInfoDer;
 use rustls::{
     client::danger::{HandshakeSignatureValid, ServerCertVerified, ServerCertVerifier},
     crypto::{verify_tls13_signature_with_raw_key, WebPkiSupportedAlgorithms},
@@ -19,7 +20,7 @@ use rustls::{
     CertificateError, DigitallySignedStruct, DistinguishedName, OtherError, PeerMisbehaved,
     SignatureScheme, SupportedProtocolVersion,
 };
-use webpki::{ring as webpki_algs, types::SubjectPublicKeyInfoDer};
+use webpki::ring as webpki_algs;
 
 use super::{certificate, Authentication};
 
@@ -331,6 +332,8 @@ impl From<certificate::ParseError> for rustls::Error {
     }
 }
 impl From<certificate::VerificationError> for rustls::Error {
+    // Keep the pinned-peer verifier's existing error mapping on the 0.35 branch.
+    #[allow(deprecated)]
     fn from(certificate::VerificationError(e): certificate::VerificationError) -> Self {
         use webpki::Error::*;
         match e {

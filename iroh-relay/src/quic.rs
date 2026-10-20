@@ -287,10 +287,10 @@ mod tests {
     use anyhow::Context;
     use n0_future::{task::AbortOnDropHandle, time};
     use quinn::crypto::rustls::QuicServerConfig;
+    use rustls::pki_types::PrivatePkcs8KeyDer;
     use tokio::time::Instant;
     use tracing::{debug, info, info_span, Instrument};
     use tracing_test::traced_test;
-    use webpki::types::PrivatePkcs8KeyDer;
 
     use super::{
         server::{QuicConfig, QuicServer},
